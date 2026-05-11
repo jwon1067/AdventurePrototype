@@ -15,21 +15,39 @@
  * @extends {Phaser.Scene}
  */
 class AdventureScene extends Phaser.Scene {
-
+    /**
+     * Phaser lifecycle: receives data passed by `scene.start(key, data)`.
+     * We use this to thread the inventory through scene transitions.
+     *
+     * @param {{inventory?: string[]}} data
+     */
     init(data) {
         this.inventory = data.inventory || [];
     }
 
+    /**
+     * @param {string} key  A unique Phaser scene key (e.g. `"tunnel"`).
+     * @param {string} name A human-readable name shown in the UI (e.g. `"The Tunnel"`).
+     */
     constructor(key, name) {
         super(key);
         this.name = name;
     }
 
+    /**
+     * Phaser lifecycle: called once when the scene starts.
+     * Lays out the UI, then invokes {@link AdventureScene#onEnter}.
+     * Subclasses should override `onEnter`, not `create`.
+     */
     create() {
+        /** @type {number} Duration in ms of scene fade-in / fade-out. */
         this.transitionDuration = 1000;
 
+        /** @type {number} Game width in scaled pixels (nominally 1920). */
         this.w = this.game.config.width;
+        /** @type {number} Game height in scaled pixels (nominally 1080). */
         this.h = this.game.config.height;
+        /** @type {number} UI spacing unit in scaled pixels (1% of width). Use multiples of `this.s` for text sizes, margins, etc. */
         this.s = this.game.config.width * 0.01;
 
         this.cameras.main.setBackgroundColor('#444');
@@ -68,7 +86,12 @@ class AdventureScene extends Phaser.Scene {
 
         this.onEnter();
     }
-
+    /**
+     * Briefly flash a message in the UI message box. The message fades out
+     * over a few seconds.
+     *
+     * @param {string} message The text to show.
+     */
     showMessage(message) {
         this.messageBox.setText(message);
         this.tweens.add({
@@ -82,12 +105,19 @@ class AdventureScene extends Phaser.Scene {
         return this.inventory.includes(item);
     }
 
+    /**
+     * Add an item to the player's inventory (no-op with a console warning
+     * if the item is already held). The inventory panel animates the new entry in.
+     *
+     * @param {string} item Item name. Short and consistent works best (e.g. `"key"`, not `"a shiny key"`).
+     */
     gainItem(item) {
         if (this.inventory.includes(item)) return;
         this.inventory.push(item);
         this.updateInventory();
     }
 
+    
     loseItem(item) {
         this.inventory = this.inventory.filter(i => i !== item);
         this.updateInventory();
@@ -117,6 +147,19 @@ class AdventureScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Subclass hook: called at the end of {@link AdventureScene#create}, after
+     * the message box and inventory panel exist. Override this in your scene
+     * to add your location's interactive objects.
+     *
+     * @example
+     * onEnter() {
+     *     this.add.text(100, 100, "a rock")
+     *         .setInteractive()
+     *         .on('pointerover', () => this.showMessage("It's a rock."))
+     *         .on('pointerdown', () => this.gotoScene('next_room'));
+     * }
+     */
     onEnter() {
         console.warn("onEnter not implemented:", this.constructor.name);
     }
@@ -148,7 +191,7 @@ class AdventureScene extends Phaser.Scene {
     }
 
     //beveal shape
-    bevealShape(){
+    bevealShape(scene){
         // Shapes
         let topT = scene.add.triangle(0, 0, 73, 23, 148, 73, 223, 23, 0xADB5BD);
         let leftT = scene.add.triangle(0, 0, 23, 33, 73, 66, 23, 103, 0x495057);

@@ -1,73 +1,46 @@
 
-class Farm extends AdventureScene {
+
+class Farm extends window.AdventureScene {
     constructor() {
         super("farm", "Farm");
     }
-
     onEnter() {
 
-       let pig = this.add.text(this.w * 0.3, this.w * 0.1, "🐖")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a pig.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the pig.");
-                this.gainItem('pig');
-                this.tweens.add({
-                    targets: pig,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => pig.destroy()
-                });
-            })
-            
-        let cow = this.add.text(this.w * 0.3, this.w * 0.3, "🐄")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("You found the cow.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You picked uo the cow.");
-                this.gainItem('cow');
-                this.tweens.add({
-                    targets: cow,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => cow.destroy()
-                });
-            })
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.1,
+            emoji: "🐖",
+            item: "pig",
+            hoverText: "It's a pig.",
+            pickupText: "You pick up the pig."
+        });
 
-        let sheep = this.add.text(this.w * 0.5, this.w * 0.2, "🐑")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("You found the sheep.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You picked up the sheep.");
-                this.gainItem('sheep');
-                this.tweens.add({
-                    targets: sheep,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => sheep.destroy()
-                });
-            })
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.3,
+            emoji: "🐄",
+            item: "cow",
+            hoverText: "You found the cow.",
+            pickupText: "You pick up the cow."
+        });
+
+        this.createCollectible({
+            x: this.w * 0.5,
+            y: this.w * 0.2,
+            emoji: "🐑",
+            item: "sheep",
+            hoverText: "You found the sheep.",
+            pickupText: "You pick up the sheep."
+        });
 
         let barn = this.add.text(this.w * 0.1, this.w * 0.15, "🧑‍🌾")
             .setFontSize(this.s * 10)
             .setInteractive()
             .on('pointerover', () => {
-                if (this.hasItem("pig") && this.hasItem("cow")  && this.hasItem("sheep")) {
-                    this.showMessage("You've completed your grocery list for this supply run.");
+                if (this.hasItem("pig") && this.hasItem("cow") && this.hasItem("sheep")) {
+                    this.showMessage("You've completed your grocery list.");
                 } else {
-                    this.showMessage("Oops, you have an incomplete grocery list, double check your list.");
+                    this.showMessage("Incomplete list.");
                 }
             })
             .on('pointerdown', () => {
@@ -75,12 +48,10 @@ class Farm extends AdventureScene {
                     this.loseItem("pig");
                     this.loseItem("cow");
                     this.loseItem("sheep");
-                    this.showMessage("*squeak*");
                     this.showMessage("Task complete!");
                     this.gotoScene('shop');
                 }
-            })
-
+            });
     }
 }
 
@@ -88,68 +59,39 @@ class Shop extends AdventureScene {
     constructor() {
         super("shop", "Grocery Store");
     }
-
     onEnter() {
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.1,
+            emoji: "🧀",
+            item: "cheese",
+            hoverText: "It's a piece of cheese.",
+            pickupText: "You pick up the cheese."
+        });
 
-        let cheese = this.add.text(this.w * 0.3, this.w * 0.1, "🧀")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a piece of cheese.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the cheese.");
-                this.gainItem('cheese');
-                this.tweens.add({
-                    targets: cheese,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => cheese.destroy()
-                });
-            })
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.3,
+            emoji: "🍅",
+            item: "tomato",
+            hoverText: "It's a tomato.",
+            pickupText: "You pick up the tomato."
+        });
 
-        let tomato = this.add.text(this.w * 0.3, this.w * 0.3, "🍅")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a tomato.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the tomato.");
-                this.gainItem('tomato');
-                this.tweens.add({
-                    targets: tomato,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => tomato.destroy()
-                });
-            })
-
-        let mushroom = this.add.text(this.w * 0.5, this.w * 0.2, "🍄")
-            .setFontSize(this.s * 10)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a mushroom.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the mushroom.");
-                this.gainItem('mushroom');
-                this.tweens.add({
-                    targets: mushroom,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => mushroom.destroy()
-                });
-            })
+        this.createCollectible({
+            x: this.w * 0.5,
+            y: this.w * 0.2,
+            emoji: "🍄",
+            item: "mushroom",
+            hoverText: "It's a mushroom.",
+            pickupText: "You pick up the mushroom."
+        });
 
         let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪")
             .setFontSize(this.s * 10)
             .setInteractive()
             .on('pointerover', () => {
-                if (this.hasItem("mushroom") && this.hasItem("tomato")  && this.hasItem("cheese")) {
+                if (this.hasItem("mushroom") && this.hasItem("tomato") && this.hasItem("cheese")) {
                     this.showMessage("You've completed your grocery list for this supply run.");
                 } else {
                     this.showMessage("Oops, you have an incomplete grocery list, double check your list.");
@@ -164,8 +106,7 @@ class Shop extends AdventureScene {
                     this.showMessage("Task complete!");
                     this.gotoScene('pizzaParlor');
                 }
-            })
-
+            });
     }
 }
 
@@ -174,30 +115,103 @@ class PizzaParlor extends AdventureScene {
         super("pizzaParlor", "Pizza Parlor");
     }
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.1,
+            emoji: "🧀",
+            item: "cheese",
+            hoverText: "It's a piece of cheese.",
+            pickupText: "You pick up the cheese."
+        });
+
+        this.createCollectible({
+            x: this.w * 0.3,
+            y: this.w * 0.3,
+            emoji: "🍅",
+            item: "tomato",
+            hoverText: "It's a tomato.",
+            pickupText: "You pick up the tomato."
+        });
+
+        this.createCollectible({
+            x: this.w * 0.5,
+            y: this.w * 0.2,
+            emoji: "🍄",
+            item: "mushroom",
+            hoverText: "It's a mushroom.",
+            pickupText: "You pick up the mushroom."
+        });
+
+        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪")
+            .setFontSize(this.s * 10)
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
+                if (this.hasItem("mushroom") && this.hasItem("tomato") && this.hasItem("cheese")) {
+                    this.showMessage("You've completed your grocery list for this supply run.");
+                } else {
+                    this.showMessage("Oops, you have an incomplete grocery list, double check your list.");
+                }
             })
             .on('pointerdown', () => {
-                this.gotoScene('shop');
+                if (this.hasItem("mushroom") && this.hasItem("tomato") && this.hasItem("cheese")) {
+                    this.loseItem("mushroom");
+                    this.loseItem("tomato");
+                    this.loseItem("cheese");
+                    this.showMessage("*squeak*");
+                    this.showMessage("Task complete!");
+                    this.gotoScene('ending');
+                }
             });
-
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage('*giggles*');
-                this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
-                });
-            })
-            .on('pointerdown', () => this.gotoScene('outro'));
     }
+}
+
+class Ending extends AdventureScene {
+    constructor() {
+        super("ending", "Ending");
+    }
+    onEnter() {
+        let finish = this.add.text(this.w * 0.1, this.w * 0.1, 'All daily tasks\n   completed!\nTime to go home.')
+            .setFontSize(this.s * 5)
+            .setInteractive()
+            .on('pointerdown', () => this.gotoScene('outro'));
+
+        new button(this, this.w * 0.1, this.w * 0.1, 'Exit', () => this.gotoScene('outro'));
+    }
+}
+
+class Loading extends Phaser.Scene{
+    constructor(){
+        super('loading');
+    }
+    preload(){}
+    create(){      
+        let { width, height } = this.scale;
+
+        this.add.rectangle(width/2, height/2, 600, 50)
+            .setStrokeStyle(8, 0xffffff);
+
+        this.textObject = this.add.text(width/2, height/2 - 100, "Loading...", {
+            font: "50px Press Start 2P",
+            color: "#ffffff"
+        }).setOrigin(0.5);
+
+        this.cameras.main.fadeIn(3000);
+
+        this.tweens.add({
+            targets: this.add.rectangle(width/2 - 290, height/2, 0, 30, 0xffffff).setOrigin(0, 0.5),
+            width: 580,
+            duration: 2000,
+            delay: 200,
+            ease: 'Power2',
+            onComplete: () => {
+                this.cameras.main.fadeOut(300);
+                this.cameras.main.once('camerafadeoutcomplete', () => {
+                    this.scene.start('intro');
+                });
+            },
+        });
+    }
+    update(){}
 }
 
 class Intro extends Phaser.Scene {
@@ -233,7 +247,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Farm, Shop, PizzaParlor, Outro],
+    scene: [Loading, Intro, Farm, Shop, PizzaParlor, Ending, Outro],
     title: "Adventure Game",
 });
 
